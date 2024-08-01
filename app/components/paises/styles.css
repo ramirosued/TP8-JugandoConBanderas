@@ -1,0 +1,135 @@
+/* styles.css */
+
+/* Estilos básicos para el body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Estilos para el contenedor principal */
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Estilos para el contenedor de la tarjeta */
+  .mainContainer {
+    width: 100%;
+    max-width: 800px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para el título */
+  .title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para la tabla */
+  .countryTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para las celdas de la tabla */
+  .countryTable th, .countryTable td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Estilos para la imagen de la bandera */
+  .flag {
+    border-radius: 4px;
+    width: 50px;
+    height: 30px;
+  }
+  
+  /* Estilos para el formulario */
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Estilos para la etiqueta del formulario */
+  .formLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Estilos para el campo de texto */
+  .inputText {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para el botón de envío */
+  .submitButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Efectos de hover y active para el botón */
+  .submitButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .submitButton:active {
+    background-color: #004a8c;
+  }
+  
+  /* Estilos responsivos para pantallas pequeñas */
+  @media (max-width: 600px) {
+    .mainContainer {
+      padding: 15px;
+    }
+  
+    .inputText {
+      max-width: 100%;
+    }
+  
+    .submitButton {
+      width: 100%;
+      padding: 12px;
+    }
+  }
+
+  .rojo{
+    color: red;
+    margin: 5px;
+    background-color: rgb(238, 107, 107);
+    border-radius: 30px;
+  }
+
+.verde{
+    color: green;
+    margin: 5px;
+    background-color: rgb(107, 238, 140);
+    border-radius: 30px;
+}
+  .message{
+    margin: 10px;
+  }
