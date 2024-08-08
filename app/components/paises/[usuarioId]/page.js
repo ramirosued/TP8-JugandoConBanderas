@@ -1,19 +1,24 @@
-"use client";
+'use client'
 import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
 import './styles.css';
 
 export default function Paises() {
-  let clase;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const usuarioId = searchParams.get('usuarioId');
 
-  const [paises, setPaises] = useState([]);
+  const [paises, setPaises] = useState({});
   const [inputValue, setInputValue] = useState('');
-  const [timer, setTimer] = useState(15); // Tiempo inicial del temporizador
+  const [timer, setTimer] = useState(15);
   const [timerActive, setTimerActive] = useState(false);
   const [puntos, setPuntos] = useState(0);
-  const [message, setMessage] = useState(''); // Estado para el mensaje de puntos
-  const [claseColor, setClaseColor] = useState('')
-  const [pista, setPista] = useState(0)
-
+  const [message, setMessage] = useState('');
+  const [claseColor, setClaseColor] = useState('');
+  const [pista, setPista] = useState(0);
+  const handleRedirect = () => {
+    router.push('/');
+  };
   useEffect(() => {
     fetchNewCountry(); 
   }, []);
@@ -24,13 +29,12 @@ export default function Paises() {
         setTimer(prevTimer => prevTimer - 1);
       }, 1000);
 
-      return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte o el temporizador se detenga
+      return () => clearInterval(interval);
     } else if (timer === 0) {
       alert('Se acabó el tiempo. Intenta de nuevo.');
       showMessage('Restas 5 puntos');
-      setPista(0)
-
-      fetchPuntos(false)
+      setPista(0);
+      fetchPuntos(false);
       fetchNewCountry();
     }
   }, [timer, timerActive]);
@@ -45,74 +49,68 @@ export default function Paises() {
       const paisAleatorio = data.data[Math.floor(Math.random() * data.data.length)];
       setPaises(paisAleatorio);
       setInputValue('');
-      setTimer(15); // Reiniciar el temporizador
-      setTimerActive(true); // Activar el temporizador
+      setTimer(15);
+      setTimerActive(true);
 
     } catch (error) {
       console.error("Error al obtener los paises:", error);
     }
   };
 
-  const fetchPuntos = async(e)=>{  //usar useEfect
-    if(e){
-      setPuntos(prevPuntos => prevPuntos + 10); // Incrementar los puntos en 10
-    }else{
-      setPuntos(prevPuntos => prevPuntos - 5); // Incrementar los puntos en 10
-    }
+  const fetchPuntos = (correcto) => {
+    setPuntos(prevPuntos => prevPuntos + (correcto ? 10 : -5));
+
+    // Actualiza los puntos del usuario en el localStorage
+    const storedUsuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const updatedUsuarios = storedUsuarios.map(u =>
+      u.id === parseInt(usuarioId) ? { ...u, puntos: u.puntos + (correcto ? 10 : -5) } : u
+    );
+    localStorage.setItem("usuarios", JSON.stringify(updatedUsuarios));
   }
 
-  const showMessage = async(text) => {
-    setMessage(text)
-    if(text == 'Bien hecho. Sumas 10 puntos'){
-      setClaseColor('verde')
-    }else{
-      setClaseColor('rojo')
-    }
+  const showMessage = (text) => {
+    setMessage(text);
+    setClaseColor(text.includes('Bien hecho') ? 'verde' : 'rojo');
     setTimeout(() => {
       setMessage('');
-      setClaseColor('')
-    }, 3000);  
-    
+      setClaseColor('');
+    }, 3000);
   };
 
-  const darPista = async()=>{
-    if(pista>=3){
-      alert('Pistas Agotadas')
-    }else{
-      console.log(pista)
-      alert('La primera letra del pais es ' + paises.name[pista]);
-      setPista(pista+1)
+  const darPista = () => {
+    if (pista >= 3) {
+      alert('Pistas Agotadas');
+    } else {
+      alert('La primera letra del país es ' + paises.name[pista]);
+      setPista(pista + 1);
     }
   }
 
   const comprobarPais = (e) => {
-    e.preventDefault(); 
-    const textoTarea = inputValue.trim().toLowerCase(); 
-    const paisNombre = paises.name.trim().toLowerCase();
-    console.log(textoTarea)
-    console.log(paises.name)
+    e.preventDefault();
+    const textoTarea = inputValue.trim().toLowerCase();
+    const paisNombre = paises.name.toLowerCase();
+
     if (textoTarea.length === 0) {
       window.confirm('No ingresaste ninguna tarea');
     } else {
       const confirmBoton = window.confirm('Deseas confirmar el nombre?');
       if (confirmBoton) {
-        if (paisNombre == textoTarea) {
+        if (paisNombre === textoTarea) {
           alert('¡Correcto!');
           showMessage('Bien hecho. Sumas 10 puntos');
-          setTimerActive(false); 
+          setTimerActive(false);
           fetchNewCountry();
-          setPista(0)
-          fetchPuntos(true)
+          setPista(0);
+          fetchPuntos(true);
         } else {
           alert('Incorrecto. Intenta de nuevo.');
-          setInputValue(''); 
+          setInputValue('');
         }
       }
+      console.log(paises.name)
     }
-    
   };
-
-  
 
   return (
     <main className="main">
@@ -137,7 +135,7 @@ export default function Paises() {
       </div>
 
       <div className={claseColor}>
-      {<p className="message">{message}</p>}
+        {<p className="message">{message}</p>}
       </div>
 
       <form className="form" onSubmit={comprobarPais}>
@@ -148,8 +146,9 @@ export default function Paises() {
         </label>
       </form>
       <button onClick={darPista}>Necesito ayuda</button>
-    </main>
-  
+      <div>
+      <button onClick={handleRedirect}>Finalizar</button>
+      </div>    
+  </main>
   );
-  
 }
