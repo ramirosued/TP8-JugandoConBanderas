@@ -8,6 +8,7 @@ export default function Home() {
     const storedUsuarios = localStorage.getItem("usuarios");
     return storedUsuarios ? JSON.parse(storedUsuarios) : [];
   });
+  console.log(usuarios)
 
   useEffect(() => {
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
@@ -24,6 +25,7 @@ export default function Home() {
       };
       setUsuarios([...usuarios, nuevoUsuario]);
       e.target.reset();
+      console.log(nuevoUsuario.id)
       router.push(`/components/paises/${nuevoUsuario.id}`);
     }
   }

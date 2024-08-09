@@ -1,12 +1,11 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from 'next/navigation';
-import './styles.css';
-
+import { useRouter, usePathname } from 'next/navigation';
+import './style.css'
 export default function Paises() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const usuarioId = searchParams.get('usuarioId');
+  const pathname = usePathname(); // Obtén la URL actual
+  const usuarioId = pathname.split('/').pop(); // Extrae el usuarioId de la URL
 
   const [paises, setPaises] = useState({});
   const [inputValue, setInputValue] = useState('');
@@ -62,9 +61,11 @@ export default function Paises() {
 
     // Actualiza los puntos del usuario en el localStorage
     const storedUsuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const updatedUsuarios = storedUsuarios.map(u =>
+    console.log(storedUsuarios)
+    const updatedUsuarios = storedUsuarios.map((u) =>
       u.id === parseInt(usuarioId) ? { ...u, puntos: u.puntos + (correcto ? 10 : -5) } : u
     );
+    console.log(usuarioId)
     localStorage.setItem("usuarios", JSON.stringify(updatedUsuarios));
   }
 
@@ -145,9 +146,11 @@ export default function Paises() {
           <button type="submit" className="submitButton">LISTO</button>
         </label>
       </form>
-      <button onClick={darPista}>Necesito ayuda</button>
       <div>
-      <button onClick={handleRedirect}>Finalizar</button>
+      <div className="divBotones">
+        <button onClick={darPista} className="botonAyuda">Necesito ayuda</button>
+        <button onClick={handleRedirect} className="botonFinlizar">Finalizar</button>
+      </div>
       </div>    
   </main>
   );
